@@ -26,7 +26,7 @@ namespace CarCenter
         }
 
         /// <summary>
-        /// Paymethod.
+        /// Paymethod. 
         /// </summary>
         /// <param name="ammount">The ammount that will be subtracted from the balance.</param>
         public bool Pay(decimal ammount)
