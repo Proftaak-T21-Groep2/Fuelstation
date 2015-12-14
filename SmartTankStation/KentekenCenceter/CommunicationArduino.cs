@@ -40,7 +40,9 @@ namespace CarCenter
            if (indata.Length == 9 && splitstring.Length == 3)
            {
                indata = indata.Substring(0, 8);
-              SendMessage(string.Format("%{0}#",fuelstation.GetFuelType(indata).ToString()));
+
+              string messagevalue = string.Format("%{0}#", fuelstation.GetFuelType(indata).ToString());
+              SendMessage(messagevalue);
            }
            if (indata.StartsWith("%ready#"))
            {

@@ -39,13 +39,13 @@ namespace CarCenter
         /// <param name="fueltype"></param>
         /// <param name="brand"></param>
         /// <param name="fuelcapacity"></param>
-        public Car(string licenseplate, TypeOfFuel fueltype, string brand, double fuelcapacity)
+        public Car(string licenseplate, TypeOfFuel fueltype, Owner owner)
         {
             Licenseplate = licenseplate;
             Fueltype = fueltype;
-            Brand = brand;
-            FuelCapacity = fuelcapacity;
-            Owner = null;
+            Brand = null;
+            FuelCapacity = 40;
+            Owner = owner;
         }
 
         public override string ToString()

@@ -28,7 +28,7 @@ namespace CarCenter
             AllCars = new List<Car>();
 
 
-            UpdateFromTextDatabase();
+           // UpdateFromTextDatabase();
         }
 
         public void setPC(CommunicationPCs pc)
@@ -63,9 +63,23 @@ namespace CarCenter
                     return caritem.Fueltype;
                 }
             }
+            Car newcar = new Car(licenseplate, pc.AskNewCarFuelType(licenseplate) , newOwnerDialog());
+            AllCars.Add(newcar);
+            return newcar.Fueltype;
+        }
 
-            //moet nog de pc opslaan 
-            return pc.AskNewCarFuelType(licenseplate);
+        public Owner newOwnerDialog ()
+        {
+            accountDialog dlg = new accountDialog();
+            Owner newowner;
+
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                newowner = dlg.owner;
+                dlg.Dispose();
+                return newowner;
+            }
+            return null;
         }
 
         public Owner getOwner(string licensePlate)
@@ -245,7 +259,7 @@ namespace CarCenter
 
                 if (ownerBankAccount != null)
                 {
-                    Owners.Add(new Owner(dataOwner[0], ownerBankAccount, dataOwner[2]));
+                    Owners.Add(new Owner(dataOwner[0], ownerBankAccount));
                 }
                 else
                 {
@@ -262,7 +276,7 @@ namespace CarCenter
                         newAuthenticationNumberString = "0" + newAuthenticationNumberString;
                     }
                     Bankaccount bankaccount = new Bankaccount(newAccountNumberString, newAuthenticationNumberString, 0);
-                    Owners.Add(new Owner(dataOwner[0], bankaccount, dataOwner[2]));
+                    Owners.Add(new Owner(dataOwner[0], bankaccount));
                 }
             }
 

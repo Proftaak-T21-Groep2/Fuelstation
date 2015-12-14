@@ -43,7 +43,7 @@ namespace CarCenter
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(fuelstation.GetFuelType("CX-TV-46").ToString());
+            MessageBox.Show(fuelstation.GetFuelType("11-KTF-6").ToString());
             listBoxCars.Items.Clear();
             foreach (Car caritem in fuelstation.AllCars)
             {
@@ -53,7 +53,7 @@ namespace CarCenter
 
         private void button2_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(fuelstation.GetFuelType("BZ-XW-62").ToString());
+            MessageBox.Show(fuelstation.GetFuelType("40-NZ-SP").ToString());
             listBoxCars.Items.Clear();
             foreach (Car caritem in fuelstation.AllCars)
             {

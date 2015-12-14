@@ -21,8 +21,8 @@ namespace CarCenter
         public Bankaccount(string accountNumber, string pincode, decimal balance)
         {
             AccountNumber    = accountNumber;
-            Pincode = pincode;
-            Balance = balance;
+            Pincode          = pincode;
+            Balance          = balance;
         }
 
         /// <summary>
