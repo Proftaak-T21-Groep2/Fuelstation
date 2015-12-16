@@ -17,6 +17,7 @@ namespace CarCenter
         public accountDialog()
         {
             AcceptButton = btnConfirm;
+            KeyPreview = true;
             InitializeComponent();
         }
 
