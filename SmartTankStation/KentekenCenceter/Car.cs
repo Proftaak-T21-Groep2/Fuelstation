@@ -21,8 +21,6 @@ namespace CarCenter
         {
             Licenseplate = licenseplate;
             Fueltype     = fueltype;
-            Brand        = null;
-            FuelCapacity = 40;
             Owner        = owner;
         }
 
