@@ -29,6 +29,16 @@ namespace CarCenter
             fuelstation.GetFromSQLDatabase("127.0.0.1", "fuelstation", "cars", ref listCars);
             fuelstation.GetFromSQLDatabase("127.0.0.1", "fuelstation", "bankAccounts", ref listBankAccounts);
             fuelstation.GetFromSQLDatabase("127.0.0.1", "fuelstation", "owners", ref listOwners);
+            List<string> types = new List<string>();
+            types.Add("licenseplate");
+            types.Add("Fueltype");
+            types.Add("Owner");
+
+            List<string> values = new List<string>();
+            values.Add("EE-00-AA");
+            values.Add("Petrol");
+            values.Add("user1");
+          //  fuelstation.SaveToDatabase("127.0.0.1","fuelstation","cars", types, values);
             foreach (string sstring in listCars)
             {
                 Console.WriteLine(sstring);
