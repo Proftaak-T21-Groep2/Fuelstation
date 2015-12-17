@@ -29,7 +29,7 @@ namespace CarCenter
             mySerialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
 
 
-            // mySerialPort.Open();
+            mySerialPort.Open();
 
         }
         public void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
@@ -51,7 +51,7 @@ namespace CarCenter
            }
 
 
-                        //%pay:AA-00-AA,amountOfFuel:500#
+           //%pay:AA-00-AA,amountOfFuel:500#
            if (indata.StartsWith("%pay"))
 
            {

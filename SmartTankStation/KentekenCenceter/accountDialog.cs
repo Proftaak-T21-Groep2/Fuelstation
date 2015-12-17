@@ -23,9 +23,19 @@ namespace CarCenter
 
         private void btnConfirm_Click(object sender, EventArgs e)
         {
-            if (tbBankNumber.Text != "" && tbName.Text != "" && tbPincode.Text != "" && tbCredit1.Text != "" && tbCredit2.Text != "" )
+            if (tbBankNumber.Text != "" && tbName.Text != "" && tbPincode.Text != "" && tbCredit1.Text != "")
             {
-                string startcredit = tbCredit1.Text + "," + tbCredit2.Text;
+                string startcredit = "";
+
+                if (tbCredit2.Text != "")
+                {
+                    startcredit = tbCredit1.Text + "," + tbCredit2.Text;
+                }
+                else
+                {
+                    startcredit = tbCredit1.Text + ",0";
+                }
+                
                 Bankaccount bankaccount = new Bankaccount(tbBankNumber.Text, tbPincode.Text, Convert.ToDecimal(startcredit));
                 owner = new Owner(tbName.Text, bankaccount);
                 this.DialogResult = DialogResult.OK;

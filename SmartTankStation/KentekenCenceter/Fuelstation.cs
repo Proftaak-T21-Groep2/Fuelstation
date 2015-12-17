@@ -84,16 +84,14 @@ namespace CarCenter
 
         public Owner getOwner(string licensePlate)
         {
-            foreach (Owner owner in Owners)
-            {
-                foreach (Car car in owner.OwnedCars)
+
+                foreach (Car car in AllCars)
                 {
                     if (car.Licenseplate == licensePlate)
                     {
-                        return owner;
+                        return car.Owner;
                     }
                 }
-            }
             return null;
         }
         public bool checkPin(string pinCode, Owner owner)
@@ -125,13 +123,12 @@ namespace CarCenter
                     price = amountOfFuel * LPGPRice;
                     break;
             }
-            price = price / 100;
             return price;
         }
 
         public decimal[] GetFuelPrice()
         {
-            string htmlcontent = ParseUrl("http://autotraveler.ru/en/netherlands/trend-price-fuel-netherlands.html#.Vlha93YveM8");
+            string htmlcontent = ParseUrl("http://autotraveler.ru/en/netherlands/trend-price-fuel-netherlands.html#.VnLHuErhCM9");
             decimal[] resultarray;
             if (htmlcontent == "not found")
             {
@@ -244,69 +241,69 @@ namespace CarCenter
 
         private void UpdateFromTextDatabase()
         {
-            List<string> listCars = new List<string>();
-            List<string> listBankAccounts = new List<string>();
-            List<string> listOwners = new List<string>();
+            //List<string> listCars = new List<string>();
+            //List<string> listBankAccounts = new List<string>();
+            //List<string> listOwners = new List<string>();
 
-            getTextFromFile(listCars, "carsdatabase.txt");
-            getTextFromFile(listBankAccounts, "bankaccountdatabase.txt");
-            getTextFromFile(listOwners, "ownerdatabase.txt");
+            //getTextFromFile(listCars, "carsdatabase.txt");
+            //getTextFromFile(listBankAccounts, "bankaccountdatabase.txt");
+            //getTextFromFile(listOwners, "ownerdatabase.txt");
 
-            foreach(string ownerString in listOwners)
-            {
-                string[] dataOwner = ownerString.Split(',');
-                Bankaccount ownerBankAccount = getBankaccount(listBankAccounts, dataOwner[1]);
+            //foreach(string ownerString in listOwners)
+            //{
+            //    string[] dataOwner = ownerString.Split(',');
+            //    Bankaccount ownerBankAccount = getBankaccount(listBankAccounts, dataOwner[1]);
 
-                if (ownerBankAccount != null)
-                {
-                    Owners.Add(new Owner(dataOwner[0], ownerBankAccount));
-                }
-                else
-                {
-                    newAccountNumber++;
-                    newAuthenticationNumber++;
-                    if (newAccountNumber > 9999)
-                    {
-                        newAuthenticationNumber = 1;
-                    }
-                    string newAccountNumberString = newAccountNumber.ToString();
-                    string newAuthenticationNumberString = newAuthenticationNumber.ToString();
-                    while (newAuthenticationNumberString.Length < 3)
-                    {
-                        newAuthenticationNumberString = "0" + newAuthenticationNumberString;
-                    }
-                    Bankaccount bankaccount = new Bankaccount(newAccountNumberString, newAuthenticationNumberString, 0);
-                    Owners.Add(new Owner(dataOwner[0], bankaccount));
-                }
-            }
+            //    if (ownerBankAccount != null)
+            //    {
+            //        Owners.Add(new Owner(dataOwner[0], ownerBankAccount));
+            //    }
+            //    else
+            //    {
+            //        newAccountNumber++;
+            //        newAuthenticationNumber++;
+            //        if (newAccountNumber > 9999)
+            //        {
+            //            newAuthenticationNumber = 1;
+            //        }
+            //        string newAccountNumberString = newAccountNumber.ToString();
+            //        string newAuthenticationNumberString = newAuthenticationNumber.ToString();
+            //        while (newAuthenticationNumberString.Length < 3)
+            //        {
+            //            newAuthenticationNumberString = "0" + newAuthenticationNumberString;
+            //        }
+            //        Bankaccount bankaccount = new Bankaccount(newAccountNumberString, newAuthenticationNumberString, 0);
+            //        Owners.Add(new Owner(dataOwner[0], bankaccount));
+            //    }
+            //}
 
-            foreach (string carString in listCars)
-            {
-                string[] data = carString.Split(',');
-                TypeOfFuel fueltype = TypeOfFuel.Unknown;
-                switch (data[1])
-                {
-                    case "Petrol":
-                        fueltype = TypeOfFuel.Petrol;
-                        break;
-                    case "Diesel":
-                        fueltype = TypeOfFuel.Diesel;
-                        break;
-                    case "LPG":
-                        fueltype = TypeOfFuel.LPG;
-                        break;
-                }
-                foreach (Owner owner in Owners)
-                {
-                    if (owner.Name == data[4])
-                    {
-                        Car car = new Car(data[0], fueltype, data[2], Convert.ToDouble(data[3]), owner);
-                        AllCars.Add(car);
-                        owner.OwnedCars.Add(car);
-                        break;
-                    }
-                }
-            }
+            //foreach (string carString in listCars)
+            //{
+            //    string[] data = carString.Split(',');
+            //    TypeOfFuel fueltype = TypeOfFuel.Unknown;
+            //    switch (data[1])
+            //    {
+            //        case "Petrol":
+            //            fueltype = TypeOfFuel.Petrol;
+            //            break;
+            //        case "Diesel":
+            //            fueltype = TypeOfFuel.Diesel;
+            //            break;
+            //        case "LPG":
+            //            fueltype = TypeOfFuel.LPG;
+            //            break;
+            //    }
+            //    foreach (Owner owner in Owners)
+            //    {
+            //        if (owner.Name == data[4])
+            //        {
+            //            Car car = new Car(data[0], fueltype, data[2], Convert.ToDouble(data[3]), owner);
+            //            AllCars.Add(car);
+            //            owner.OwnedCars.Add(car);
+            //            break;
+            //        }
+            //    }
+            //}
 
         }
     }

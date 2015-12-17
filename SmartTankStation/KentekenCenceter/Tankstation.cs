@@ -21,12 +21,14 @@ namespace CarCenter
         public Tankstation()
         {
             InitializeComponent();
+
+            Text = "Welcome to our tankstation";
         
             fuelstation = new Fuelstation();
             pcconnection = new CommunicationPCs(fuelstation);
             fuelstation.setPC(pcconnection);
-            arduino1 = new CommunicationArduino(fuelstation, "COM12");
-            arduino2 = new CommunicationArduino(fuelstation, "COM13");
+            arduino1 = new CommunicationArduino(fuelstation, "COM13");
+            arduino2 = new CommunicationArduino(fuelstation, "COM12");
             fuelstation.setArduinos(arduino1, arduino2);
 
             foreach (Car caritem in fuelstation.AllCars)
@@ -64,7 +66,17 @@ namespace CarCenter
 
         private void btnDummyTest_Click(object sender, EventArgs e)
         {
-            fuelstation.Pay("GL-09-PQ", 12m);
+            fuelstation.Pay("11-KTF-6", 12m);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(fuelstation.GetFuelType("59-FK-FB").ToString());
+            listBoxCars.Items.Clear();
+            foreach (Car caritem in fuelstation.AllCars)
+            {
+                listBoxCars.Items.Add(caritem);
+            }
         }
     }
 }

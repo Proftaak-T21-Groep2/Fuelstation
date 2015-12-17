@@ -59,7 +59,7 @@ namespace CarCenter
                 string line = messageRetrieve;
         
                 TypeOfFuel fueltype = TypeOfFuel.Unknown;
-                if (messageRetrieve == "$Petrol")
+                if (messageRetrieve == "$Benzine")
                 {
                     fueltype = TypeOfFuel.Petrol;
                 }
