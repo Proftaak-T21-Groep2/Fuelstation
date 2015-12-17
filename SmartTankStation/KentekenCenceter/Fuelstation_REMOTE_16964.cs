@@ -26,7 +26,7 @@ namespace CarCenter
             Owners = new List<Owner>();
             Bankaccounts = new List<Bankaccount>();
             AllCars = new List<Car>();
-            UpdateFromDatabase();
+           UpdateFromDatabase();
         }
         public void setPC(CommunicationPCs pc)
         {
@@ -57,11 +57,11 @@ namespace CarCenter
                     return caritem.Fueltype;
                 }
             }
-            Car newcar = new Car(licenseplate, pc.AskNewCarFuelType(licenseplate), newOwnerDialog());
+            Car newcar = new Car(licenseplate, pc.AskNewCarFuelType(licenseplate) , newOwnerDialog());
             AllCars.Add(newcar);
             return newcar.Fueltype;
         }
-        public Owner newOwnerDialog()
+        public Owner newOwnerDialog ()
         {
             accountDialog dlg = new accountDialog();
             Owner newowner;
@@ -98,7 +98,7 @@ namespace CarCenter
             decimal[] fuelPrices = GetFuelPrice();
             decimal PetrolPrice = fuelPrices[0];
             decimal DieselPrice = fuelPrices[2];
-            decimal LPGPRice = fuelPrices[3];
+            decimal LPGPRice    = fuelPrices[3];
             decimal price = 0;
             TypeOfFuel fuelType = GetFuelType(licencePlate);
             switch (fuelType)
@@ -122,7 +122,7 @@ namespace CarCenter
             if (htmlcontent == "not found")
             {
                 //If the site doens't load, this will be returned
-                resultarray = new decimal[] { 1.60m, 1.65m, 1.25m, 0.75m };
+                resultarray = new decimal[] { 1.60m, 1.65m, 1.25m, 0.75m }; 
                 return resultarray;
             }
             int htmlindex1 = htmlcontent.IndexOf("diffBenzPrice");
@@ -209,12 +209,12 @@ namespace CarCenter
             //List<string> listBankAccounts = new List<string>();
             //List<string> listOwners = new List<string>();
            // getTextFromFile(listCars, "carsdatabase.txt");
-            // getTextFromFile(listCars, "carsdatabase.txt");
-            // getTextFromFile(listBankAccounts, "bankaccountdatabase.txt");
-            // getTextFromFile(listOwners, "ownerdatabase.txt");
+            //getTextFromFile(listCars, "carsdatabase.txt");
+            //getTextFromFile(listBankAccounts, "bankaccountdatabase.txt");
+            //getTextFromFile(listOwners, "ownerdatabase.txt");
             GetFromSQLDatabase("127.0.0.1", "fuelstation", "bankAccounts", ref listBankAccounts);
             //foreach(string ownerString in listOwners)
-            foreach (string ownerString in listOwners)
+            //{
             //    string[] dataOwner = ownerString.Split(',');
             //    Bankaccount ownerBankAccount = getBankaccount(listBankAccounts, dataOwner[1]);
             //    if (ownerBankAccount != null)
@@ -294,85 +294,15 @@ namespace CarCenter
                         thisrow += Reader.GetValue(i).ToString();
                         i++;
                     }
-                    while (i < Reader.FieldCount);
+                    while(i<Reader.FieldCount);
                     items.Add(thisrow);
                 }
                 connection.Close();
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 MessageBox.Show(e.Message);
             }
-        }
-
-        public void SaveToDatabase(string databaseAddress, string databaseName, string tableName, List<string> types, List<string> values/* string licenceplate, string fueltype, string owner*/)
-        {
-            string MyConString = "SERVER=" + databaseAddress + ";" +
-                "DATABASE=" + databaseName + ";" +
-                "UID=Admin;" +
-                "PASSWORD=123;";
-            try
-            {
-                using (MySqlConnection openCon = new MySqlConnection(MyConString))
-                {
-                    string saveString = insertIntoSQLStringBuilder(tableName, ref types, ref values);
-                    string sstring = "INSERT INTO `cars` (`licenseplate`, `Fueltype`, `Owner`) VALUES ('EE-00-AA', 'Petrol', 'user1');";
-                    Console.WriteLine(sstring);
-                    using (MySqlCommand querySaveSstring = new MySqlCommand(saveString))
-                    {
-                        querySaveSstring.Connection = openCon;
-                        //querySaveStaff.Parameters.Add("@staffName",MySqlDbType.VarChar,30).Value=name;
-                        openCon.Open();
-                        Console.WriteLine(querySaveSstring.CommandText);;
-                        querySaveSstring.ExecuteNonQuery();
-                        openCon.Close();
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-
-                MessageBox.Show(e.Message);
-            }
-        }
-
-        private string insertIntoSQLStringBuilder(string table, ref List<string> types, ref List<string> values)
-        {
-            string buildedQuery = string.Format("INSERT INTO '{0}' (",table);
-            int amoutOfTypes = 0;
-            foreach(string type in types)
-            {
-                amoutOfTypes++;
-                buildedQuery += string.Format("'{0}'",type);
-                if(amoutOfTypes != values.Count())
-                {
-                    buildedQuery += ", ";
-                }
-                else if(amoutOfTypes == types.Count())
-                {
-                    buildedQuery += ")";
-                }
-            }
-
-            buildedQuery += " VALUES (";
-
-            int amoutOfValues = 0;
-
-            foreach(string value in values)
-            {
-                amoutOfValues++;
-                buildedQuery += string.Format("'{0}'",value);
-                if(amoutOfValues != values.Count())
-                {
-                    buildedQuery += ", ";
-                }
-                else if(amoutOfValues == values.Count())
-                {
-                    buildedQuery += ")";
-                }
-            }
-           buildedQuery += ";";
-            return buildedQuery;
         }
     }
 }

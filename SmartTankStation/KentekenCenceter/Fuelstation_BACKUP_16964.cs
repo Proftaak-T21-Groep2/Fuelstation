@@ -205,16 +205,81 @@ namespace CarCenter
         }
         private void UpdateFromDatabase()
         {
+<<<<<<< HEAD
+            List<string> listCars = new List<string>();
+            List<string> listBankAccounts = new List<string>();
+            List<string> listOwners = new List<string>();
+            // getTextFromFile(listCars, "carsdatabase.txt");
+            // getTextFromFile(listBankAccounts, "bankaccountdatabase.txt");
+            // getTextFromFile(listOwners, "ownerdatabase.txt");
+            GetFromSQLDatabase("127.0.0.1", "fuelstation", "cars", ref listCars);
+            GetFromSQLDatabase("127.0.0.1", "fuelstation", "bankAccounts", ref listBankAccounts);
+            GetFromSQLDatabase("127.0.0.1", "fuelstation", "owners", ref listOwners);
+            foreach (string ownerString in listOwners)
+            {
+                string[] dataOwner = ownerString.Split(',');
+                Bankaccount ownerBankAccount = getBankaccount(listBankAccounts, dataOwner[1]);
+                if (ownerBankAccount != null)
+                {
+                    Owners.Add(new Owner(dataOwner[0], ownerBankAccount));
+                }
+                else
+                {
+                    newAccountNumber++;
+                    newAuthenticationNumber++;
+                    if (newAccountNumber > 9999)
+                    {
+                        newAuthenticationNumber = 1;
+                    }
+                    string newAccountNumberString = newAccountNumber.ToString();
+                    string newAuthenticationNumberString = newAuthenticationNumber.ToString();
+                    while (newAuthenticationNumberString.Length < 3)
+                    {
+                        newAuthenticationNumberString = "0" + newAuthenticationNumberString;
+                    }
+                    Bankaccount bankaccount = new Bankaccount(newAccountNumberString, newAuthenticationNumberString, 0);
+                    Owners.Add(new Owner(dataOwner[0], bankaccount));
+                }
+            }
+            foreach (string carString in listCars)
+            {
+                string[] data = carString.Split(',');
+                TypeOfFuel fueltype = TypeOfFuel.Unknown;
+                switch (data[1])
+                {
+                    case "Petrol":
+                        fueltype = TypeOfFuel.Petrol;
+                        break;
+                    case "Diesel":
+                        fueltype = TypeOfFuel.Diesel;
+                        break;
+                    case "LPG":
+                        fueltype = TypeOfFuel.LPG;
+                        break;
+                }
+                foreach (Owner owner in Owners)
+                {
+                    if (owner.Name == data[2])
+                    {
+                        //Car temp = new Car(licenseplate, fueltype, owner)
+                        Car car = new Car(data[0], fueltype, owner);
+                        AllCars.Add(car);
+                        owner.OwnedCars.Add(car);
+                        break;
+                    }
+                }
+            }
+=======
             //List<string> listCars = new List<string>();
             //List<string> listBankAccounts = new List<string>();
             //List<string> listOwners = new List<string>();
            // getTextFromFile(listCars, "carsdatabase.txt");
-            // getTextFromFile(listCars, "carsdatabase.txt");
-            // getTextFromFile(listBankAccounts, "bankaccountdatabase.txt");
-            // getTextFromFile(listOwners, "ownerdatabase.txt");
+            //getTextFromFile(listCars, "carsdatabase.txt");
+            //getTextFromFile(listBankAccounts, "bankaccountdatabase.txt");
+            //getTextFromFile(listOwners, "ownerdatabase.txt");
             GetFromSQLDatabase("127.0.0.1", "fuelstation", "bankAccounts", ref listBankAccounts);
             //foreach(string ownerString in listOwners)
-            foreach (string ownerString in listOwners)
+            //{
             //    string[] dataOwner = ownerString.Split(',');
             //    Bankaccount ownerBankAccount = getBankaccount(listBankAccounts, dataOwner[1]);
             //    if (ownerBankAccount != null)
@@ -266,6 +331,7 @@ namespace CarCenter
             //        }
             //    }
             //}
+>>>>>>> origin/master
         }
         public void GetFromSQLDatabase(string databaseAddress, string databaseName, string tableName, ref List<string> items)
         {

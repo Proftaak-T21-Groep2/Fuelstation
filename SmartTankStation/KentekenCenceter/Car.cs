@@ -20,12 +20,15 @@ namespace CarCenter
         public Car(string licenseplate, TypeOfFuel fueltype, Owner owner)
         {
             Licenseplate = licenseplate;
-            Fueltype = fueltype;
-            Owner = owner;
+            Fueltype     = fueltype;
+            Brand        = null;
+            FuelCapacity = 40;
+            Owner        = owner;
         }
+
         public override string ToString()
         {
-            return Licenseplate + "  "+ Fueltype.ToString();
+            return Owner.Name + " - " + Licenseplate + " - " + Fueltype.ToString();
         }
     }
 }
