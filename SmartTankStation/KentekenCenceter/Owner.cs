@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace CarCenter
 {
     public class Owner
     {
         public List<Car> OwnedCars {get; private set;}
-
         public string Name { get; private set; }
         public Bankaccount Bankaccount { get; private set; }
-
         /// <summary>
         /// Create a owner.
         /// </summary>
@@ -23,10 +20,8 @@ namespace CarCenter
         {
             Name               = name;
             Bankaccount        = bankaccount;
-
             OwnedCars = new List<Car>();
         }
-
         public bool ChangeBankAccount(Bankaccount bankAccount)
         {
             if(bankAccount != null)
@@ -36,7 +31,6 @@ namespace CarCenter
             }
             return false;
         }
-
         public bool AddCar(Car car)
         {
             if (car != null)
@@ -46,6 +40,5 @@ namespace CarCenter
             }
             return false;
         }
-
     }
 }

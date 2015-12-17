@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace CarCenter
 {
     public class Bankaccount
@@ -11,7 +10,6 @@ namespace CarCenter
         public string AccountNumber { get; private set; }
         public string Pincode { get; private set; }
         public decimal Balance { get; private set; }
-
         /// <summary>
         /// Create a bankaccount.
         /// </summary>
@@ -24,7 +22,6 @@ namespace CarCenter
             Pincode          = pincode;
             Balance          = balance;
         }
-
         /// <summary>
         /// Paymethod. 
         /// </summary>

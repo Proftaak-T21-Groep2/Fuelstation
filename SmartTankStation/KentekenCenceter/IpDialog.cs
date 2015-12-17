@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 namespace CarCenter
 {
     public partial class IpDialog : Form
@@ -41,7 +40,6 @@ namespace CarCenter
                 MessageBox.Show("Voer een geldig IP adress in", "Warning");
             }        
         }
-
         private void IpDialog_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
@@ -49,7 +47,6 @@ namespace CarCenter
                 this.Close();
             }
         }
-
         private void IpDialog_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)

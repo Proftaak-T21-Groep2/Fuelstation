@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using System.Net;
-
+using MySql.Web;
+using MySql.Data;
+using MySql.Data.MySqlClient;
 namespace CarCenter
 {
     class Fuelstation
@@ -14,34 +16,27 @@ namespace CarCenter
         public List<Bankaccount> Bankaccounts { get; private set; }
         public List<Owner> Owners { get; private set; }
         public List<Car> AllCars { get; private set; }
-
         private CommunicationPCs pc;
         private CommunicationArduino ard1;
         private CommunicationArduino ard2;
         private int newAccountNumber = 0;
         private int newAuthenticationNumber = 10000000;
-
         public Fuelstation()
         {
             Owners = new List<Owner>();
             Bankaccounts = new List<Bankaccount>();
             AllCars = new List<Car>();
-
-
-           // UpdateFromTextDatabase();
+           UpdateFromDatabase();
         }
-
         public void setPC(CommunicationPCs pc)
         {
             this.pc = pc;
         }
-
         public void setArduinos(CommunicationArduino arduino1, CommunicationArduino arduino2)
         {
             ard1 = arduino1;
             ard2 = arduino2;
         }
-
         public void sendSerialMsg(int whichArduino, String message)
         {
             if (whichArduino == 1)
@@ -53,7 +48,6 @@ namespace CarCenter
                 ard2.SendMessage(message);
             }
         }
-
         public TypeOfFuel GetFuelType(string licenseplate)
         {
             foreach (Car caritem in AllCars)
@@ -67,12 +61,10 @@ namespace CarCenter
             AllCars.Add(newcar);
             return newcar.Fueltype;
         }
-
         public Owner newOwnerDialog ()
         {
             accountDialog dlg = new accountDialog();
             Owner newowner;
-
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 newowner = dlg.owner;
@@ -81,7 +73,6 @@ namespace CarCenter
             }
             return null;
         }
-
         public Owner getOwner(string licensePlate)
         {
             foreach (Owner owner in Owners)
@@ -104,7 +95,6 @@ namespace CarCenter
             }
             return false;
         }
-
         public decimal CalculatePrice(string licencePlate, decimal amountOfFuel)
         {
             decimal[] fuelPrices = GetFuelPrice();
@@ -128,7 +118,6 @@ namespace CarCenter
             price = price / 100;
             return price;
         }
-
         public decimal[] GetFuelPrice()
         {
             string htmlcontent = ParseUrl("http://autotraveler.ru/en/netherlands/trend-price-fuel-netherlands.html#.Vlha93YveM8");
@@ -139,30 +128,22 @@ namespace CarCenter
                 resultarray = new decimal[] { 1.60m, 1.65m, 1.25m, 0.75m }; 
                 return resultarray;
             }
-
             int htmlindex1 = htmlcontent.IndexOf("diffBenzPrice");
             int htmlindex2 = htmlcontent.IndexOf("boxFuel rekPriceFuel");
-
             string htmlsubstring = htmlcontent.Substring(htmlindex1, htmlindex2 - htmlindex1);
             string[] htmlsplit = htmlsubstring.Split('<');
-
             decimal petrolPrice = Convert.ToDecimal(htmlsplit[2].Substring(9, 5).Replace('.', ','));
             decimal petrolPrice98 = Convert.ToDecimal(htmlsplit[9].Substring(9, 5).Replace('.', ','));
             decimal dieselPrice = Convert.ToDecimal(htmlsplit[16].Substring(9, 5).Replace('.', ','));
             decimal lpgPrice = Convert.ToDecimal(htmlsplit[23].Substring(9, 5).Replace('.', ','));
-
             resultarray = new decimal[] { petrolPrice, petrolPrice98, dieselPrice, lpgPrice };
-
             return resultarray;
         }
-
         public string ParseUrl(string url)
         {
             WebClient wc = new WebClient();
-
             return wc.DownloadString(url);
         }
-
         public void Pay(string licencePlate, decimal amountOfFuel)
         {
             decimal PayAmount = CalculatePrice(licencePlate, amountOfFuel);
@@ -189,14 +170,11 @@ namespace CarCenter
                 }
             }
         }
-
-
         private string getPinCodeFromUser(Owner owner, decimal amountToPay)
         {
             // Create and display an instance of the dialog box
             BankPinCode dlg = new BankPinCode();
             string pinCode = "";
-
             // Show the dialog and determine the state of the 
             // DialogResult property for the form.
             dlg.lblBalance.Text = "Current Balance: " + owner.Bankaccount.Balance.ToString() + "\n Price: " + amountToPay.ToString();
@@ -207,19 +185,6 @@ namespace CarCenter
             }
             return pinCode;
         }
-
-        public void getTextFromFile(List<string> list, string fileLocation)
-        {
-            using (StreamReader reader = new StreamReader(fileLocation))
-            {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    list.Add(line);
-                }
-            }
-        }
-
         public Bankaccount getBankaccount(List<string> listBankAccounts, string ownerAccountNumber)
         {
             foreach (string bankAccountString in listBankAccounts)
@@ -241,22 +206,21 @@ namespace CarCenter
             }
             return null;
         }
-
-        private void UpdateFromTextDatabase()
+        private void UpdateFromDatabase()
         {
             List<string> listCars = new List<string>();
             List<string> listBankAccounts = new List<string>();
             List<string> listOwners = new List<string>();
-
-            getTextFromFile(listCars, "carsdatabase.txt");
-            getTextFromFile(listBankAccounts, "bankaccountdatabase.txt");
-            getTextFromFile(listOwners, "ownerdatabase.txt");
-
+           // getTextFromFile(listCars, "carsdatabase.txt");
+           // getTextFromFile(listBankAccounts, "bankaccountdatabase.txt");
+           // getTextFromFile(listOwners, "ownerdatabase.txt");
+            GetFromSQLDatabase("127.0.0.1", "fuelstation", "cars", ref listCars);
+            GetFromSQLDatabase("127.0.0.1", "fuelstation", "bankAccounts", ref listBankAccounts);
+            GetFromSQLDatabase("127.0.0.1", "fuelstation", "owners", ref listOwners);
             foreach(string ownerString in listOwners)
             {
                 string[] dataOwner = ownerString.Split(',');
                 Bankaccount ownerBankAccount = getBankaccount(listBankAccounts, dataOwner[1]);
-
                 if (ownerBankAccount != null)
                 {
                     Owners.Add(new Owner(dataOwner[0], ownerBankAccount));
@@ -279,7 +243,6 @@ namespace CarCenter
                     Owners.Add(new Owner(dataOwner[0], bankaccount));
                 }
             }
-
             foreach (string carString in listCars)
             {
                 string[] data = carString.Split(',');
@@ -298,16 +261,53 @@ namespace CarCenter
                 }
                 foreach (Owner owner in Owners)
                 {
-                    if (owner.Name == data[4])
+                    if (owner.Name == data[2])
                     {
-                        Car car = new Car(data[0], fueltype, data[2], Convert.ToDouble(data[3]), owner);
+                        //Car temp = new Car(licenseplate, fueltype, owner)
+                        Car car = new Car(data[0], fueltype, owner);
                         AllCars.Add(car);
                         owner.OwnedCars.Add(car);
                         break;
                     }
                 }
             }
-
+        }
+        public void GetFromSQLDatabase(string databaseAddress, string databaseName, string tableName, ref List<string> items)
+        {
+            try
+            {
+                string MyConString = "SERVER=" + databaseAddress + ";" +
+                "DATABASE=" + databaseName + ";" +
+                "UID=Admin;" +
+                "PASSWORD=123;";
+                MySqlConnection connection = new MySqlConnection(MyConString);
+                MySqlCommand command = connection.CreateCommand();
+                MySqlDataReader Reader;
+                command.CommandText = "select * from " + tableName;
+                connection.Open();
+                Reader = command.ExecuteReader();
+                while (Reader.Read())
+                {
+                    string thisrow = "";
+                    int i = 0;
+                    do
+                    {
+                        if (i != 0)
+                        {
+                            thisrow += ",";
+                        }
+                        thisrow += Reader.GetValue(i).ToString();
+                        i++;
+                    }
+                    while(i<Reader.FieldCount);
+                    items.Add(thisrow);
+                }
+                connection.Close();
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
     }
 }

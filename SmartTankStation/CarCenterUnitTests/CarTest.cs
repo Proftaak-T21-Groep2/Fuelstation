@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CarCenter;
-
 namespace CarCenterUnitTests
 {
     [TestClass]
@@ -10,7 +9,6 @@ namespace CarCenterUnitTests
         [TestMethod]
         public void Testmakingacarobject()
         {
-            
         }
     }
 }
