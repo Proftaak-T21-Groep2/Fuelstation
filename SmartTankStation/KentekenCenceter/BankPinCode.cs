@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 namespace CarCenter
 {
     public partial class BankPinCode : Form
@@ -17,7 +16,6 @@ namespace CarCenter
         {
             InitializeComponent();
         }
-
         private void btnOk_Click(object sender, EventArgs e)
         {
             if (lblPin.Text == "****")
@@ -25,7 +23,6 @@ namespace CarCenter
                 this.DialogResult = DialogResult.OK;
             }
         }
-
         private void btnPin1_Click(object sender, EventArgs e)
         {
             if (lblPin.Text != "****")
@@ -34,7 +31,6 @@ namespace CarCenter
                 lblPin.Text = lblPin.Text + "*";
             }
         }
-
         private void btnPin2_Click(object sender, EventArgs e)
         {
             if (lblPin.Text != "****")
@@ -43,7 +39,6 @@ namespace CarCenter
                 lblPin.Text = lblPin.Text + "*";
             }
         }
-
         private void btnPin3_Click(object sender, EventArgs e)
         {
             if (lblPin.Text != "****")
@@ -52,7 +47,6 @@ namespace CarCenter
                 lblPin.Text = lblPin.Text + "*";
             }
         }
-
         private void btnPin4_Click(object sender, EventArgs e)
         {
             if (lblPin.Text != "****")
@@ -61,7 +55,6 @@ namespace CarCenter
                 lblPin.Text = lblPin.Text + "*";
             }
         }
-
         private void btnPin5_Click(object sender, EventArgs e)
         {
             if (lblPin.Text != "****")
@@ -70,7 +63,6 @@ namespace CarCenter
                 lblPin.Text = lblPin.Text + "*";
             }
         }
-
         private void btnPin6_Click(object sender, EventArgs e)
         {
             if (lblPin.Text != "****")
@@ -79,7 +71,6 @@ namespace CarCenter
                 lblPin.Text = lblPin.Text + "*";
             }
         }
-
         private void btnPin7_Click(object sender, EventArgs e)
         {
             if (lblPin.Text != "****")
@@ -88,7 +79,6 @@ namespace CarCenter
                 lblPin.Text = lblPin.Text + "*";
             }
         }
-
         private void btnPin8_Click(object sender, EventArgs e)
         {
             if (lblPin.Text != "****")
@@ -97,7 +87,6 @@ namespace CarCenter
                 lblPin.Text = lblPin.Text + "*";
             }
         }
-
         private void btnPin9_Click(object sender, EventArgs e)
         {
             if (lblPin.Text != "****")
@@ -106,7 +95,6 @@ namespace CarCenter
                 lblPin.Text = lblPin.Text + "*";
             }
         }
-
         private void btnPin0_Click(object sender, EventArgs e)
         {
             if (lblPin.Text != "****")
@@ -115,12 +103,10 @@ namespace CarCenter
                 lblPin.Text = lblPin.Text + "*";
             }
         }
-
         private void btnPinC_Click(object sender, EventArgs e)
         {
             ClearPinCode();
         }
-
         private void ClearPinCode()
         {
             PinCode = "";

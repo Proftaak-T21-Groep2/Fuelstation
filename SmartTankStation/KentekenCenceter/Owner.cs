@@ -8,7 +8,6 @@ namespace CarCenter
 {
     public class Owner
     {
-
         public string Name { get; private set; }
         public Bankaccount Bankaccount { get; private set; }
 
@@ -23,6 +22,25 @@ namespace CarCenter
             Name               = name;
             Bankaccount        = bankaccount;
 
+            OwnedCars = new List<Car>();
+        }
+        public bool ChangeBankAccount(Bankaccount bankAccount)
+        {
+            if(bankAccount != null)
+            {
+                Bankaccount = bankAccount;
+                return true;
+            }
+            return false;
+        }
+        public bool AddCar(Car car)
+        {
+            if (car != null)
+            {
+                OwnedCars.Add(car);
+                return true;
+            }
+            return false;
         }
     }
 }

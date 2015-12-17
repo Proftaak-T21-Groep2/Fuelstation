@@ -28,12 +28,31 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.Lbl = new System.Windows.Forms.Label();
+            this.ServerLbl = new System.Windows.Forms.Label();
             this.listBoxCars = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.btnDummyTest = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.SuspendLayout();
+            // 
+            // Lbl
+            // 
+            this.Lbl.AutoSize = true;
+            this.Lbl.Location = new System.Drawing.Point(37, 107);
+            this.Lbl.Name = "Lbl";
+            this.Lbl.Size = new System.Drawing.Size(36, 13);
+            this.Lbl.TabIndex = 3;
+            this.Lbl.Text = "server";
+            // 
+            // ServerLbl
+            // 
+            this.ServerLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ServerLbl.Location = new System.Drawing.Point(92, 106);
+            this.ServerLbl.Name = "ServerLbl";
+            this.ServerLbl.Size = new System.Drawing.Size(444, 23);
+            this.ServerLbl.TabIndex = 4;
             // 
             // listBoxCars
             // 
@@ -97,6 +116,7 @@
             this.Text = "Tankstation";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

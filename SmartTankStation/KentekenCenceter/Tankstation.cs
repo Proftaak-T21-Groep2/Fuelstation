@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 namespace CarCenter
 {
     public partial class Tankstation : Form
@@ -15,9 +14,7 @@ namespace CarCenter
         Fuelstation fuelstation;
         CommunicationArduino arduino1;
         CommunicationArduino arduino2;
-
         CommunicationPCs pcconnection;
-
         public Tankstation()
         {
             InitializeComponent();
@@ -30,7 +27,6 @@ namespace CarCenter
             arduino1 = new CommunicationArduino(fuelstation, "COM13");
             arduino2 = new CommunicationArduino(fuelstation, "COM12");
             fuelstation.setArduinos(arduino1, arduino2);
-
             foreach (Car caritem in fuelstation.AllCars)
             {
                 listBoxCars.Items.Add(caritem);

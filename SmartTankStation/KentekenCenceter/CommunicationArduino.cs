@@ -27,8 +27,6 @@ namespace CarCenter
             mySerialPort.RtsEnable = true;
 
             mySerialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
-
-
             mySerialPort.Open();
 
         }
@@ -49,8 +47,6 @@ namespace CarCenter
                fuelstation.sendSerialMsg(1, "%start#");
                fuelstation.sendSerialMsg(2, "%start#");
            }
-
-
            //%pay:AA-00-AA,amountOfFuel:500#
            if (indata.StartsWith("%pay"))
 
