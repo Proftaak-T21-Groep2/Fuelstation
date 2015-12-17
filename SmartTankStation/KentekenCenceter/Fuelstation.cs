@@ -57,8 +57,23 @@ namespace CarCenter
                     return caritem.Fueltype;
                 }
             }
-            Car newcar = new Car(licenseplate, pc.AskNewCarFuelType(licenseplate), newOwnerDialog());
+            Owner owner = newOwnerDialog();
+            TypeOfFuel fuelype = pc.AskNewCarFuelType(licenseplate);
+            Car newcar = new Car(licenseplate, fuelype, owner);
             AllCars.Add(newcar);
+            List<string> types = new List<string>();
+            List<string> values = new List<string>();
+
+            types.Add("licenseplate");
+            types.Add("fuelType");
+            types.Add("Owner");
+
+            values.Add(licenseplate);
+            values.Add(fuelype.ToString());
+            values.Add(owner.Name);
+
+            SaveToDatabase("127.0.0.1", "fuelstation", "cars", types, values);
+
             return newcar.Fueltype;
         }
         public Owner newOwnerDialog()
@@ -335,12 +350,12 @@ namespace CarCenter
 
         private string insertIntoSQLStringBuilder(string table, ref List<string> types, ref List<string> values)
         {
-            string buildedQuery = string.Format("INSERT INTO '{0}' (",table);
+            string buildedQuery = string.Format("INSERT INTO `{0}` (",table);
             int amoutOfTypes = 0;
             foreach(string type in types)
             {
                 amoutOfTypes++;
-                buildedQuery += string.Format("'{0}'",type);
+                buildedQuery += string.Format("`{0}`",type);
                 if(amoutOfTypes != values.Count())
                 {
                     buildedQuery += ", ";
