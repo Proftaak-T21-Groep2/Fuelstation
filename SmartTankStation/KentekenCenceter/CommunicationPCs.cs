@@ -52,7 +52,7 @@ namespace CarCenter
             myTrafficMessageProxy = new CarCenter.TrafficMessageService.TrafficMessageClient();
             try
             {
-                EndpointAddress endPointAddress = new EndpointAddress("http://" + serveradress/* + ":90" */+ "/MessageService");
+                EndpointAddress endPointAddress = new EndpointAddress("http://" + serveradress + ":90" + "/MessageService");
                 myTrafficMessageProxy.Endpoint.Address = endPointAddress;
                 //check of er een connectie is
                 myTrafficMessageProxy.GetServerName();
