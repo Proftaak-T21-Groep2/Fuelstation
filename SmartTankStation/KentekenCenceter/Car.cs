@@ -15,8 +15,7 @@ namespace CarCenter
         /// </summary>
         /// <param name="licenseplate"></param>
         /// <param name="fueltype"></param>
-        /// <param name="brand"></param>
-        /// <param name="fuelcapacity"></param>
+        /// <param name="owner"></param>
         public Car(string licenseplate, TypeOfFuel fueltype, Owner owner)
         {
             Licenseplate = licenseplate;

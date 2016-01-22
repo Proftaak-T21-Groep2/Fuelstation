@@ -13,7 +13,6 @@ namespace CarCenter
     {
         Fuelstation fuelstation;
         CommunicationArduino arduino1;
-        CommunicationArduino arduino2;
         CommunicationPCs pcconnection;
         public Tankstation()
         {
@@ -25,8 +24,7 @@ namespace CarCenter
             pcconnection = new CommunicationPCs(fuelstation);
             fuelstation.setPC(pcconnection);
             arduino1 = new CommunicationArduino(fuelstation, "COM13");
-            arduino2 = new CommunicationArduino(fuelstation, "COM12");
-            fuelstation.setArduinos(arduino1, arduino2);
+            fuelstation.setArduinos(arduino1);
             foreach (Car caritem in fuelstation.AllCars)
             {
                 listBoxCars.Items.Add(caritem);
@@ -36,7 +34,6 @@ namespace CarCenter
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             arduino1.CloseConnection();
-            arduino2.CloseConnection();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -62,7 +59,7 @@ namespace CarCenter
 
         private void btnDummyTest_Click(object sender, EventArgs e)
         {
-            fuelstation.Pay("11-KTF-6", 12m);
+            fuelstation.Pay("11-KTF-6", 8m);
         }
 
         private void button3_Click(object sender, EventArgs e)

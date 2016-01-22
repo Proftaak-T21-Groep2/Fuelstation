@@ -18,7 +18,6 @@ namespace CarCenter
         public List<Car> AllCars { get; private set; }
         private CommunicationPCs pc;
         private CommunicationArduino ard1;
-        private CommunicationArduino ard2;
         private int newAccountNumber = 0;
         private int newAuthenticationNumber = 10000000;
         public Fuelstation()
@@ -32,21 +31,13 @@ namespace CarCenter
         {
             this.pc = pc;
         }
-        public void setArduinos(CommunicationArduino arduino1, CommunicationArduino arduino2)
+        public void setArduinos(CommunicationArduino arduino1)
         {
             ard1 = arduino1;
-            ard2 = arduino2;
         }
         public void sendSerialMsg(int whichArduino, String message)
         {
-            if (whichArduino == 1)
-            {
-                ard1.SendMessage(message);
-            }
-            else if (whichArduino == 2)
-            {
-                ard2.SendMessage(message);
-            }
+            ard1.SendMessage(message);
         }
         public TypeOfFuel GetFuelType(string licenseplate)
         {
@@ -91,13 +82,13 @@ namespace CarCenter
         public Owner getOwner(string licensePlate)
         {
 
-                foreach (Car car in AllCars)
+            foreach (Car car in AllCars)
+            {
+                if (car.Licenseplate == licensePlate)
                 {
-                    if (car.Licenseplate == licensePlate)
-                    {
-                        return car.Owner;
-                    }
+                    return car.Owner;
                 }
+            }
             return null;
         }
         public bool checkPin(string pinCode, Owner owner)
@@ -168,7 +159,37 @@ namespace CarCenter
                 {
                     if (owner.Bankaccount.Pay(PayAmount))
                     {
-                        MessageBox.Show(String.Format("Pincode correct\n\nCurrent balance: {0}", owner.Bankaccount.Balance));
+
+
+                        string MyConString = "SERVER=127.0.0.1;" +
+                "DATABASE=fuelstation;" +
+                "UID=Admin;" +
+                "PASSWORD=123;";
+                        try
+                        {
+                            using (MySqlConnection openCon = new MySqlConnection(MyConString))
+                            {
+                                //UPDATE `bankaccounts` SET `balance`=100000 WHERE `accountNr`=125;
+                                string sstring = "UPDATE `bankaccounts` SET `balance`=" + owner.Bankaccount.Balance.ToString() + " WHERE `accountNr`=" + owner.Bankaccount.AccountNumber.ToString() + ";";
+                                //         Console.WriteLine(sstring);
+                                using (MySqlCommand querySaveSstring = new MySqlCommand(sstring))
+                                {
+                                    querySaveSstring.Connection = openCon;
+                                    //querySaveStaff.Parameters.Add("@staffName",MySqlDbType.VarChar,30).Value=name;
+                                    openCon.Open();
+                                    Console.WriteLine(querySaveSstring.CommandText); ;
+                                    querySaveSstring.ExecuteNonQuery();
+                                    openCon.Close();
+                                    MessageBox.Show(String.Format("Pincode correct\n\nCurrent balance: {0}", owner.Bankaccount.Balance));
+
+                                }
+                            }
+                        }
+                        catch
+                        {
+
+                        }
+
                     }
                     else
                     {
@@ -233,6 +254,17 @@ namespace CarCenter
                 if (ownerBankAccount != null)
                 {
                     Owners.Add(new Owner(dataOwner[0], ownerBankAccount));
+
+
+               /*     List<string> ownertypes = new List<string>();
+                    ownertypes.Add("name");
+                    ownertypes.Add("bankAccount");
+
+                    List<string> ownervalues = new List<string>();
+                    ownervalues.Add(dataOwner[0]);
+                    ownervalues.Add(ownerBankAccount.AccountNumber);
+
+                    SaveToDatabase("127.0.0.1", "fuelstation", "owners", ownertypes, ownervalues);*/
                 }
                 else
                 {
@@ -250,6 +282,16 @@ namespace CarCenter
                     }
                     Bankaccount bankaccount = new Bankaccount(newAccountNumberString, newAuthenticationNumberString, 0);
                     Owners.Add(new Owner(dataOwner[0], bankaccount));
+
+                    List<string> ownertypes = new List<string>();
+                    ownertypes.Add("name");
+                    ownertypes.Add("bankAccount");
+
+                    List<string> ownervalues = new List<string>();
+                    ownervalues.Add(dataOwner[0]);
+                    ownervalues.Add(ownerBankAccount.AccountNumber);
+
+                    SaveToDatabase("127.0.0.1", "fuelstation", "owners", ownertypes, ownervalues);
                 }
             }
             foreach (string carString in listCars)
@@ -274,6 +316,21 @@ namespace CarCenter
                     {
                         Car car = new Car(data[0], fueltype, owner);
                         AllCars.Add(car);
+
+
+
+
+                      /*  List<string> cartypes = new List<string>();
+                        cartypes.Add("licenseplate");
+                        cartypes.Add("fueltype");
+                        cartypes.Add("owner");
+
+                        List<string> carvalues = new List<string>();
+                        carvalues.Add(car.Licenseplate);
+                        carvalues.Add(car.Fueltype.ToString());
+                        carvalues.Add(car.Owner.Name);
+
+                        SaveToDatabase("127.0.0.1", "fuelstation", "owners", cartypes, carvalues);*/
                         break;
                     }
                 }
@@ -314,6 +371,7 @@ namespace CarCenter
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
+                System.Environment.Exit(0);
             }
         }
 
@@ -328,14 +386,14 @@ namespace CarCenter
                 using (MySqlConnection openCon = new MySqlConnection(MyConString))
                 {
                     string saveString = insertIntoSQLStringBuilder(tableName, ref types, ref values);
-                    string sstring = "INSERT INTO `cars` (`licenseplate`, `Fueltype`, `Owner`) VALUES ('EE-00-AA', 'Petrol', 'user1');";
-                    Console.WriteLine(sstring);
+                    //         string sstring = "INSERT INTO `cars` (`licenseplate`, `Fueltype`, `Owner`) VALUES ('EE-00-AA', 'Petrol', 'user1');";
+                    //         Console.WriteLine(sstring);
                     using (MySqlCommand querySaveSstring = new MySqlCommand(saveString))
                     {
                         querySaveSstring.Connection = openCon;
                         //querySaveStaff.Parameters.Add("@staffName",MySqlDbType.VarChar,30).Value=name;
                         openCon.Open();
-                        Console.WriteLine(querySaveSstring.CommandText);;
+                        Console.WriteLine(querySaveSstring.CommandText); ;
                         querySaveSstring.ExecuteNonQuery();
                         openCon.Close();
                     }
@@ -350,17 +408,17 @@ namespace CarCenter
 
         private string insertIntoSQLStringBuilder(string table, ref List<string> types, ref List<string> values)
         {
-            string buildedQuery = string.Format("INSERT INTO `{0}` (",table);
+            string buildedQuery = string.Format("INSERT INTO `{0}` (", table);
             int amoutOfTypes = 0;
-            foreach(string type in types)
+            foreach (string type in types)
             {
                 amoutOfTypes++;
-                buildedQuery += string.Format("`{0}`",type);
-                if(amoutOfTypes != values.Count())
+                buildedQuery += string.Format("`{0}`", type);
+                if (amoutOfTypes != values.Count())
                 {
                     buildedQuery += ", ";
                 }
-                else if(amoutOfTypes == types.Count())
+                else if (amoutOfTypes == types.Count())
                 {
                     buildedQuery += ")";
                 }
@@ -370,20 +428,20 @@ namespace CarCenter
 
             int amoutOfValues = 0;
 
-            foreach(string value in values)
+            foreach (string value in values)
             {
                 amoutOfValues++;
-                buildedQuery += string.Format("'{0}'",value);
-                if(amoutOfValues != values.Count())
+                buildedQuery += string.Format("'{0}'", value);
+                if (amoutOfValues != values.Count())
                 {
                     buildedQuery += ", ";
                 }
-                else if(amoutOfValues == values.Count())
+                else if (amoutOfValues == values.Count())
                 {
                     buildedQuery += ")";
                 }
             }
-           buildedQuery += ";";
+            buildedQuery += ";";
             return buildedQuery;
         }
     }
